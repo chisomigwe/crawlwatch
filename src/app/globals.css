@@ -1,21 +1,224 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "./hero.js";
+/* HeroUI theme source */
+@source "../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
+@custom-variant dark (&:is(.dark *));
 
+/* ============================================
+   BASE COLORS - These are overridden by theme.config.js
+   Keep these as fallbacks
+   ============================================ */
 :root {
+  /* Background & Foreground */
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Primary Colors (Blue by default - overridden by ThemeProvider) */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary: #2563eb;
+
+  /* Secondary Colors (Indigo by default - overridden by ThemeProvider) */
+  --color-secondary-50: #eef2ff;
+  --color-secondary-100: #e0e7ff;
+  --color-secondary-200: #c7d2fe;
+  --color-secondary-300: #a5b4fc;
+  --color-secondary-400: #818cf8;
+  --color-secondary-500: #6366f1;
+  --color-secondary-600: #4f46e5;
+  --color-secondary-700: #4338ca;
+  --color-secondary-800: #3730a3;
+  --color-secondary-900: #312e81;
+  --color-secondary: #4f46e5;
+
+  /* Success */
+  --color-success: #22c55e;
+  --color-success-600: #16a34a;
+
+  /* Warning */
+  --color-warning: #f59e0b;
+  --color-warning-600: #d97706;
+
+  /* Danger */
+  --color-danger: #ef4444;
+  --color-danger-600: #dc2626;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================
+   TAILWIND THEME INTEGRATION
+   ============================================ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-poppins);
+  --font-bebas: var(--font-bebas);
+
+  /* Primary color scale */
+  --color-primary-50: var(--color-primary-50);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+
+  /* Secondary color scale */
+  --color-secondary-50: var(--color-secondary-50);
+  --color-secondary-100: var(--color-secondary-100);
+  --color-secondary-200: var(--color-secondary-200);
+  --color-secondary-300: var(--color-secondary-300);
+  --color-secondary-400: var(--color-secondary-400);
+  --color-secondary-500: var(--color-secondary-500);
+  --color-secondary-600: var(--color-secondary-600);
+  --color-secondary-700: var(--color-secondary-700);
+  --color-secondary-800: var(--color-secondary-800);
+  --color-secondary-900: var(--color-secondary-900);
 }
 
+/* ============================================
+   UTILITY CLASSES USING THEME COLORS
+   ============================================ */
+
+/* Primary backgrounds */
+.bg-primary { background-color: var(--color-primary); }
+.bg-primary-50 { background-color: var(--color-primary-50); }
+.bg-primary-100 { background-color: var(--color-primary-100); }
+.bg-primary-500 { background-color: var(--color-primary-500); }
+.bg-primary-600 { background-color: var(--color-primary-600); }
+.bg-primary-700 { background-color: var(--color-primary-700); }
+
+/* Primary text */
+.text-primary { color: var(--color-primary); }
+.text-primary-600 { color: var(--color-primary-600); }
+.text-primary-700 { color: var(--color-primary-700); }
+
+/* Secondary backgrounds */
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-secondary-500 { background-color: var(--color-secondary-500); }
+.bg-secondary-600 { background-color: var(--color-secondary-600); }
+
+/* Secondary text */
+.text-secondary { color: var(--color-secondary); }
+
+/* Gradient using theme colors */
+.bg-gradient-primary {
+  background: linear-gradient(to right, var(--color-primary-600), var(--color-secondary-600));
+}
+
+/* Border using theme colors */
+.border-primary { border-color: var(--color-primary); }
+.border-primary-200 { border-color: var(--color-primary-200); }
+.border-primary-600 { border-color: var(--color-primary-600); }
+
+/* Ring using theme colors */
+.ring-primary { --tw-ring-color: var(--color-primary); }
+.ring-primary-600 { --tw-ring-color: var(--color-primary-600); }
+
+/* Focus using theme colors */
+.focus\:ring-primary:focus { --tw-ring-color: var(--color-primary); }
+
+/* Hover states */
+.hover\:bg-primary-700:hover { background-color: var(--color-primary-700); }
+.hover\:text-primary:hover { color: var(--color-primary); }
+.hover\:text-primary-600:hover { color: var(--color-primary-600); }
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
 body {
-  color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--foreground);
+  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+}
+
+/* Bebas Neue font class */
+.font-bebas {
+  font-family: var(--font-bebas), sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility - uses theme primary color */
+*:focus-visible {
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ============================================
+   COMPONENT HELPER CLASSES
+   ============================================ */
+
+/* Pro badge gradient */
+.badge-pro {
+  background: linear-gradient(to right, var(--color-primary-600), var(--color-secondary-600));
+  color: white;
+}
+
+/* Primary button styles */
+.btn-primary {
+  background-color: var(--color-primary-600);
+  color: white;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-700);
+}
+
+/* Outlined button using theme */
+.btn-outline-primary {
+  border: 1px solid var(--color-primary-600);
+  color: var(--color-primary-600);
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--color-primary-50);
+}
+
+/* Icon container with theme color */
+.icon-primary {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+
+/* Card with primary accent */
+.card-primary-accent {
+  border-left: 4px solid var(--color-primary-600);
 }
