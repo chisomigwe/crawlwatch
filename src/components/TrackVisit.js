@@ -3,15 +3,16 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
-const TRACK_VISIT_URL = 'https://nvztjpbcjrpekbvdnnhq.supabase.co/functions/v1/track-visit';
+const METRICS_API_URL = process.env.NEXT_PUBLIC_METRICS_API_URL || 'https://igwe-industry-alerts.vercel.app';
 
 /**
  * TrackVisit Component
  *
- * Tracks page visits for analytics. Set your app name in .env.local:
- * NEXT_PUBLIC_METRICS_APP_NAME=your-app-name
+ * Tracks page visits for analytics.
  *
- * Or update the app_name directly in this file.
+ * Set in .env.local:
+ *   NEXT_PUBLIC_METRICS_APP_NAME=your-app-name
+ *   NEXT_PUBLIC_METRICS_API_URL=https://your-metrics-dashboard.vercel.app (optional)
  */
 export default function TrackVisit() {
   const pathname = usePathname();
@@ -25,7 +26,7 @@ export default function TrackVisit() {
 
     async function trackVisit() {
       try {
-        await fetch(TRACK_VISIT_URL, {
+        await fetch(`${METRICS_API_URL}/api/track`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
