@@ -6,6 +6,7 @@ import { Providers } from "./providers";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { siteConfig } from "@/config/site.config";
+import TrackVisit from "@/components/TrackVisit";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -68,6 +69,7 @@ export default function RootLayout({ children }) {
           </Providers>
           <Analytics />
           <SpeedInsights />
+          <TrackVisit />
         </body>
       </html>
     </ClerkProvider>
