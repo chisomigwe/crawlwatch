@@ -159,7 +159,7 @@ export default function HomePage() {
               Everything You Need to Win the AI Search Game
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-              From real-time agent tracking to content optimization, AgentLens gives you the complete toolkit for AI-driven growth.
+              From real-time agent tracking to content optimization, CrawlWatch gives you the complete toolkit for AI-driven growth.
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="font-bebas text-4xl text-gray-900 sm:text-5xl">
-              How AgentLens Works
+              How CrawlWatch Works
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
               Start seeing AI agent traffic in three simple steps.
@@ -202,7 +202,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Connect Your Site</h3>
               <p className="mt-2 text-gray-600">
-                Add AgentLens with one of our 6 integrations. Vercel, Cloudflare, WordPress, and more. Takes under 5 minutes.
+                Add CrawlWatch with one of our 6 integrations. Vercel, Cloudflare, WordPress, and more. Takes under 5 minutes.
               </p>
             </div>
             <div className="text-center">
@@ -310,7 +310,7 @@ export default function HomePage() {
               Stop Flying Blind on AI Traffic
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-emerald-100">
-              Join thousands of growth teams who use AgentLens to understand and optimize their AI agent traffic.
+              Join thousands of growth teams who use CrawlWatch to understand and optimize their AI agent traffic.
             </p>
             <div className="mt-10">
               <SignUpCTA>

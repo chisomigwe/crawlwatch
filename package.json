@@ -1,9 +1,9 @@
 {
-  "name": "agentlens",
+  "name": "crawlwatch",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "See every AI agent on your site. In real time. Growth analytics for the agentic web.",
+  "description": "See every AI crawler on your site. In real time. Growth analytics for the agentic web.",
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",

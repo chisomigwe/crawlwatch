@@ -21,6 +21,9 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/api/stripe-webhook(.*)",
+  "/api/track(.*)",
+  "/api/agents(.*)",
+  "/api/setup-db(.*)",
   "/llms.txt",
 ]);
 

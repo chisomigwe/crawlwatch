@@ -1,5 +1,5 @@
 /**
- * AgentLens Theme Configuration
+ * CrawlWatch Theme Configuration
  *
  * Emerald/teal primary with indigo secondary — evokes data, growth, and intelligence.
  */

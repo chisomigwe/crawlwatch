@@ -1,8 +1,8 @@
-# AgentLens
+# CrawlWatch
 
 **See every AI agent on your site. In real time.**
 
-AgentLens is a growth analytics platform for the agentic web. It tracks which AI agents (ChatGPT, Perplexity, Claude, Gemini, and others) visit your website, monitors your brand's visibility in AI-generated answers, and provides actionable recommendations to improve your AI search rankings.
+CrawlWatch is a growth analytics platform for the agentic web. It tracks which AI agents (ChatGPT, Perplexity, Claude, Gemini, and others) visit your website, monitors your brand's visibility in AI-generated answers, and provides actionable recommendations to improve your AI search rankings.
 
 ## Features
 
@@ -38,8 +38,8 @@ AgentLens is a growth analytics platform for the agentic web. It tracks which AI
 
 ```bash
 # Clone the repo
-git clone https://github.com/chisomigwe/agentlens.git
-cd agentlens
+git clone https://github.com/chisomigwe/crawlwatch.git
+cd crawlwatch
 
 # Install dependencies
 npm install

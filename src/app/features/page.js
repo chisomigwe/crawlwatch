@@ -22,7 +22,7 @@ import { generatePageMetadata } from "@/lib/metadata";
 
 export const metadata = generatePageMetadata({
   title: "Features",
-  description: "Discover how AgentLens helps you track AI agent traffic, monitor AI visibility, and optimize your content for the agentic web.",
+  description: "Discover how CrawlWatch helps you track AI agent traffic, monitor AI visibility, and optimize your content for the agentic web.",
   path: "/features",
 });
 
@@ -89,7 +89,7 @@ const detailedFeatures = [
   },
   {
     title: "One-Click Integrations",
-    description: "Set up AgentLens in minutes with guided setup wizards for every major platform. Our integrations are asynchronous and never impact your site's performance.",
+    description: "Set up CrawlWatch in minutes with guided setup wizards for every major platform. Our integrations are asynchronous and never impact your site's performance.",
     icon: Plug,
     details: [
       "Vercel — no-code log drain integration",
@@ -158,7 +158,7 @@ export default function FeaturesPage() {
                         <div className="h-3 w-3 rounded-full bg-red-400" />
                         <div className="h-3 w-3 rounded-full bg-yellow-400" />
                         <div className="h-3 w-3 rounded-full bg-green-400" />
-                        <span className="ml-2 text-sm text-gray-400">AgentLens Dashboard</span>
+                        <span className="ml-2 text-sm text-gray-400">CrawlWatch Dashboard</span>
                       </div>
                       <div className="mt-6 space-y-4">
                         <div className="h-4 w-3/4 rounded bg-gray-200" />

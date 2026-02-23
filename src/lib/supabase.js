@@ -16,65 +16,66 @@ export const supabaseAdmin = process.env.NEXT_PUBLIC_SUPABASE_URL
     )
   : null;
 
-/**
- * Sync a Clerk user to Supabase
- * Call this after user signs up or signs in
- */
+// ============================================
+// USER MANAGEMENT
+// ============================================
+
 export async function syncUserToSupabase(clerkId, email) {
+  if (!supabaseAdmin) return null;
   const { data, error } = await supabaseAdmin
-    .from("users")
+    .from("crawlwatch_users")
     .upsert(
-      {
-        clerk_id: clerkId,
-        email: email,
-        updated_at: new Date().toISOString(),
-      },
-      {
-        onConflict: "clerk_id",
-      }
+      { clerk_id: clerkId, email, updated_at: new Date().toISOString() },
+      { onConflict: "clerk_id" }
     )
     .select()
     .single();
 
   if (error) {
-    console.error("Error syncing user to Supabase:", error);
+    console.error("Error syncing user:", error);
     throw error;
   }
-
   return data;
 }
 
-/**
- * Check if a user has paid/pro status
- */
-export async function checkUserPaymentStatus(clerkId) {
+export async function getUserByClerkId(clerkId) {
+  if (!supabaseAdmin) return null;
   const { data, error } = await supabaseAdmin
-    .from("users")
-    .select("payment_status, payment_tier, payment_id")
+    .from("crawlwatch_users")
+    .select("*")
     .eq("clerk_id", clerkId)
     .single();
 
-  if (error) {
-    console.error("Error checking payment status:", error);
-    return { isPro: false, tier: "free" };
+  if (error && error.code !== "PGRST116") {
+    console.error("Error getting user:", error);
   }
+  return data;
+}
+
+export async function checkUserPaymentStatus(clerkId) {
+  if (!supabaseAdmin) return { isPro: false, tier: "free" };
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_users")
+    .select("payment_status, plan, payment_id")
+    .eq("clerk_id", clerkId)
+    .single();
+
+  if (error) return { isPro: false, tier: "free" };
 
   return {
     isPro: data?.payment_status === "paid",
-    tier: data?.payment_tier || "free",
+    tier: data?.plan || "free",
     paymentId: data?.payment_id,
   };
 }
 
-/**
- * Update user payment status after successful payment
- */
 export async function updateUserPaymentStatus(clerkId, paymentId, amount) {
+  if (!supabaseAdmin) return null;
   const { data, error } = await supabaseAdmin
-    .from("users")
+    .from("crawlwatch_users")
     .update({
       payment_status: "paid",
-      payment_tier: "pro",
+      plan: "growth",
       payment_id: paymentId,
       payment_amount: amount,
       paid_at: new Date().toISOString(),
@@ -83,124 +84,286 @@ export async function updateUserPaymentStatus(clerkId, paymentId, amount) {
     .select()
     .single();
 
-  if (error) {
-    console.error("Error updating payment status:", error);
-    throw error;
-  }
-
+  if (error) throw error;
   return data;
 }
 
-/**
- * Upload a file to Supabase storage
- */
-export async function uploadFileToStorage(file, clerkId, fileId) {
-  const fileName = `${clerkId}/${fileId}/${file.name}`;
+// ============================================
+// SITE MANAGEMENT
+// ============================================
 
-  const { data, error } = await supabaseAdmin.storage
-    .from("documents")
-    .upload(fileName, file, {
-      cacheControl: "3600",
-      upsert: false,
-    });
-
-  if (error) {
-    console.error("Error uploading file:", error);
-    throw error;
-  }
-
-  return data;
-}
-
-/**
- * Get signed URL for a file
- */
-export async function getFileSignedUrl(filePath, expiresIn = 3600) {
-  const { data, error } = await supabaseAdmin.storage
-    .from("documents")
-    .createSignedUrl(filePath, expiresIn);
-
-  if (error) {
-    console.error("Error getting signed URL:", error);
-    throw error;
-  }
-
-  return data.signedUrl;
-}
-
-/**
- * Save a document/item record
- */
-export async function saveDocument(clerkId, documentData) {
+export async function createSite(userId, domain, name) {
+  if (!supabaseAdmin) return null;
   const { data, error } = await supabaseAdmin
-    .from("documents")
-    .insert({
-      user_id: clerkId,
-      ...documentData,
-      created_at: new Date().toISOString(),
-    })
+    .from("crawlwatch_sites")
+    .upsert(
+      {
+        user_id: userId,
+        domain,
+        name: name || domain,
+        verification_token: crypto.randomUUID(),
+      },
+      { onConflict: "user_id,domain" }
+    )
     .select()
     .single();
 
-  if (error) {
-    console.error("Error saving document:", error);
-    throw error;
-  }
-
+  if (error) throw error;
   return data;
 }
 
-/**
- * Get all documents for a user
- */
-export async function getUserDocuments(clerkId) {
+export async function getUserSites(clerkId) {
+  if (!supabaseAdmin) return [];
+  const user = await getUserByClerkId(clerkId);
+  if (!user) return [];
+
   const { data, error } = await supabaseAdmin
-    .from("documents")
+    .from("crawlwatch_sites")
     .select("*")
-    .eq("user_id", clerkId)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Error getting user documents:", error);
-    throw error;
-  }
-
-  return data;
+  if (error) return [];
+  return data || [];
 }
 
-/**
- * Get a single document by ID
- */
-export async function getDocumentById(documentId, clerkId) {
+export async function getSiteByDomain(domain) {
+  if (!supabaseAdmin) return null;
   const { data, error } = await supabaseAdmin
-    .from("documents")
+    .from("crawlwatch_sites")
     .select("*")
-    .eq("id", documentId)
-    .eq("user_id", clerkId)
+    .eq("domain", domain)
     .single();
 
-  if (error) {
-    console.error("Error getting document:", error);
-    throw error;
-  }
-
+  if (error) return null;
   return data;
 }
 
-/**
- * Delete a document
- */
-export async function deleteDocument(documentId, clerkId) {
-  const { error } = await supabaseAdmin
-    .from("documents")
-    .delete()
-    .eq("id", documentId)
-    .eq("user_id", clerkId);
+// ============================================
+// AGENT VISIT TRACKING
+// ============================================
 
-  if (error) {
-    console.error("Error deleting document:", error);
-    throw error;
+export async function recordAgentVisit(visitData) {
+  if (!supabaseAdmin) return null;
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_agent_visits")
+    .insert(visitData)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getAgentVisits(siteId, { hours = 24, limit = 100 } = {}) {
+  if (!supabaseAdmin) return [];
+  const since = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
+
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_agent_visits")
+    .select("*")
+    .eq("site_id", siteId)
+    .gte("visited_at", since)
+    .order("visited_at", { ascending: false })
+    .limit(limit);
+
+  if (error) return [];
+  return data || [];
+}
+
+export async function getAgentVisitStats(siteId, hours = 24) {
+  if (!supabaseAdmin) return { total: 0, agents: [], topPages: [] };
+  const since = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
+
+  const { data: visits, error } = await supabaseAdmin
+    .from("crawlwatch_agent_visits")
+    .select("agent_name, path, visited_at")
+    .eq("site_id", siteId)
+    .gte("visited_at", since)
+    .order("visited_at", { ascending: false });
+
+  if (error || !visits) return { total: 0, agents: [], topPages: [] };
+
+  const agentMap = {};
+  const pageMap = {};
+
+  for (const visit of visits) {
+    if (!agentMap[visit.agent_name]) {
+      agentMap[visit.agent_name] = { name: visit.agent_name, visits: 0, pages: new Set(), lastSeen: visit.visited_at };
+    }
+    agentMap[visit.agent_name].visits++;
+    agentMap[visit.agent_name].pages.add(visit.path);
+
+    if (!pageMap[visit.path]) {
+      pageMap[visit.path] = { path: visit.path, visits: 0, agents: new Set() };
+    }
+    pageMap[visit.path].visits++;
+    pageMap[visit.path].agents.add(visit.agent_name);
   }
 
-  return true;
+  const agents = Object.values(agentMap)
+    .map((a) => ({ ...a, pages: a.pages.size }))
+    .sort((a, b) => b.visits - a.visits);
+
+  const topPages = Object.values(pageMap)
+    .map((p) => ({ ...p, agents: p.agents.size }))
+    .sort((a, b) => b.visits - a.visits)
+    .slice(0, 10);
+
+  return { total: visits.length, agents, topPages };
+}
+
+// ============================================
+// AGENTS DIRECTORY
+// ============================================
+
+export async function getAllAgents() {
+  if (!supabaseAdmin) return [];
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_agents")
+    .select("*")
+    .eq("is_active", true)
+    .order("name");
+
+  if (error) return [];
+  return data || [];
+}
+
+export async function getAgentByUserAgent(userAgentString) {
+  if (!supabaseAdmin) return null;
+  const { data: agents } = await supabaseAdmin
+    .from("crawlwatch_agents")
+    .select("*")
+    .eq("is_active", true);
+
+  if (!agents) return null;
+
+  for (const agent of agents) {
+    if (agent.user_agent_pattern && userAgentString.includes(agent.user_agent_pattern)) {
+      return agent;
+    }
+  }
+  return null;
+}
+
+// ============================================
+// VISIBILITY SCORES
+// ============================================
+
+export async function saveVisibilityScore(siteId, scoreData) {
+  if (!supabaseAdmin) return null;
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_visibility_scores")
+    .insert({ site_id: siteId, ...scoreData })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getLatestVisibilityScore(siteId) {
+  if (!supabaseAdmin) return null;
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_visibility_scores")
+    .select("*")
+    .eq("site_id", siteId)
+    .order("calculated_at", { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) return null;
+  return data;
+}
+
+export async function getVisibilityHistory(siteId, days = 30) {
+  if (!supabaseAdmin) return [];
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_visibility_scores")
+    .select("overall_score, platform_scores, calculated_at")
+    .eq("site_id", siteId)
+    .gte("calculated_at", since)
+    .order("calculated_at", { ascending: true });
+
+  if (error) return [];
+  return data || [];
+}
+
+// ============================================
+// PAGE SCORES / OPTIMIZATION
+// ============================================
+
+export async function savePageScore(siteId, pageData) {
+  if (!supabaseAdmin) return null;
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_page_scores")
+    .upsert(
+      { site_id: siteId, ...pageData, scanned_at: new Date().toISOString() },
+      { onConflict: "site_id,path" }
+    )
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getPageScores(siteId) {
+  if (!supabaseAdmin) return [];
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_page_scores")
+    .select("*")
+    .eq("site_id", siteId)
+    .order("overall_score", { ascending: true });
+
+  if (error) return [];
+  return data || [];
+}
+
+// ============================================
+// CITATIONS
+// ============================================
+
+export async function saveCitation(siteId, citationData) {
+  if (!supabaseAdmin) return null;
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_citations")
+    .insert({ site_id: siteId, ...citationData })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getCitations(siteId, { days = 7, limit = 50 } = {}) {
+  if (!supabaseAdmin) return [];
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+
+  const { data, error } = await supabaseAdmin
+    .from("crawlwatch_citations")
+    .select("*")
+    .eq("site_id", siteId)
+    .gte("detected_at", since)
+    .order("detected_at", { ascending: false })
+    .limit(limit);
+
+  if (error) return [];
+  return data || [];
+}
+
+export async function getCitationCount(siteId, days = 7) {
+  if (!supabaseAdmin) return 0;
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+
+  const { count, error } = await supabaseAdmin
+    .from("crawlwatch_citations")
+    .select("*", { count: "exact", head: true })
+    .eq("site_id", siteId)
+    .gte("detected_at", since);
+
+  if (error) return 0;
+  return count || 0;
 }

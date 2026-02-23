@@ -1,7 +1,7 @@
 /**
- * AgentLens - Site Configuration
+ * CrawlWatch - Site Configuration
  *
- * Central configuration for the AgentLens application.
+ * Central configuration for the CrawlWatch application.
  * See every AI agent on your site. In real time.
  */
 
@@ -14,9 +14,9 @@ export const siteConfig = {
   // ============================================
   // CORE BRANDING
   // ============================================
-  name: "AgentLens",
+  name: "CrawlWatch",
   tagline: "See every AI agent on your site. In real time.",
-  description: "AgentLens is a growth analytics platform for the agentic web. Track which AI agents visit your site, monitor your visibility across AI search platforms, and get actionable insights to drive organic growth. Trusted by growth teams, marketers, and SEO agencies.",
+  description: "CrawlWatch is a growth analytics platform for the agentic web. Track which AI agents visit your site, monitor your visibility across AI search platforms, and get actionable insights to drive organic growth. Trusted by growth teams, marketers, and SEO agencies.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
 
   // ============================================
@@ -33,28 +33,28 @@ export const siteConfig = {
   // CONTACT EMAILS
   // ============================================
   emails: {
-    support: "support@agentlens.ai",
-    legal: "legal@agentlens.ai",
-    contact: "hello@agentlens.ai",
-    privacy: "privacy@agentlens.ai",
+    support: "support@crawlwatch.ai",
+    legal: "legal@crawlwatch.ai",
+    contact: "hello@crawlwatch.ai",
+    privacy: "privacy@crawlwatch.ai",
   },
 
   // ============================================
   // SOCIAL LINKS
   // ============================================
   social: {
-    twitter: "https://twitter.com/AgentLensAI",
+    twitter: "https://twitter.com/CrawlWatchAI",
     instagram: null,
     youtube: null,
-    linkedin: "https://linkedin.com/company/agentlens",
-    github: "https://github.com/chisomigwe/agentlens",
+    linkedin: "https://linkedin.com/company/crawlwatch",
+    github: "https://github.com/chisomigwe/crawlwatch",
   },
 
   // ============================================
   // LEGAL INFORMATION
   // ============================================
   legal: {
-    companyName: "AgentLens Inc.",
+    companyName: "CrawlWatch Inc.",
     jurisdiction: "Delaware, USA",
     effectiveDate: "February 23, 2026",
     maxLiability: "$100",
@@ -205,7 +205,7 @@ export const siteConfig = {
   landing: {
     hero: {
       title: "See Every AI Agent On Your Site",
-      subtitle: "30% of web traffic now comes from AI agents. AgentLens turns that invisible traffic into actionable growth insights with real-time analytics, visibility tracking, and content optimization.",
+      subtitle: "30% of web traffic now comes from AI agents. CrawlWatch turns that invisible traffic into actionable growth insights with real-time analytics, visibility tracking, and content optimization.",
       cta: "Get Started Free",
       secondaryCta: "See Features",
     },
@@ -254,7 +254,7 @@ export const siteConfig = {
       foundingDate: "2026",
       founders: [
         {
-          name: "AgentLens Team",
+          name: "CrawlWatch Team",
           title: "Founding Team",
           url: null,
         },
@@ -282,39 +282,39 @@ export const siteConfig = {
       subtitle: "Everything you need to know about AI agent analytics.",
       items: [
         {
-          question: "What is AgentLens?",
-          answer: "AgentLens is a growth analytics platform for the agentic web. It tracks which AI agents (ChatGPT, Perplexity, Claude, Gemini, and others) visit your website, monitors your brand's visibility in AI-generated answers, and provides actionable recommendations to improve your AI search rankings.",
+          question: "What is CrawlWatch?",
+          answer: "CrawlWatch is a growth analytics platform for the agentic web. It tracks which AI agents (ChatGPT, Perplexity, Claude, Gemini, and others) visit your website, monitors your brand's visibility in AI-generated answers, and provides actionable recommendations to improve your AI search rankings.",
         },
         {
           question: "What are AI agents and why should I care about them?",
           answer: "AI agents are automated systems from companies like OpenAI, Google, Anthropic, and others that crawl websites to gather information. They power AI chatbots like ChatGPT and Perplexity. About 30% of web traffic now comes from these agents, and they increasingly influence how products are discovered and recommended online.",
         },
         {
-          question: "How does AgentLens track AI agents?",
-          answer: "AgentLens integrates with your existing infrastructure (Vercel, Cloudflare, AWS, WordPress, or any backend) to analyze server logs asynchronously. It identifies AI agent traffic, classifies bots by type and purpose, and provides real-time analytics without impacting your page load speed.",
+          question: "How does CrawlWatch track AI agents?",
+          answer: "CrawlWatch integrates with your existing infrastructure (Vercel, Cloudflare, AWS, WordPress, or any backend) to analyze server logs asynchronously. It identifies AI agent traffic, classifies bots by type and purpose, and provides real-time analytics without impacting your page load speed.",
         },
         {
           question: "Is there a free plan?",
           answer: "Yes. Our free plan includes 1 website, 50 monthly prompt runs, 3 AI platforms tracked, and access to our AI Visibility Score and Agent Directory. No credit card required.",
         },
         {
-          question: "How is AgentLens different from traditional analytics tools?",
-          answer: "Traditional analytics tools like Google Analytics focus on human visitors. AgentLens specifically tracks AI agent and bot traffic, which represents a growing share of web traffic that traditional tools ignore. We also monitor your visibility in AI-generated answers, not just on your own site.",
+          question: "How is CrawlWatch different from traditional analytics tools?",
+          answer: "Traditional analytics tools like Google Analytics focus on human visitors. CrawlWatch specifically tracks AI agent and bot traffic, which represents a growing share of web traffic that traditional tools ignore. We also monitor your visibility in AI-generated answers, not just on your own site.",
         },
         {
-          question: "Does AgentLens slow down my website?",
-          answer: "No. All integrations are asynchronous and process data from server logs. AgentLens never injects scripts into your pages or intercepts requests. There is zero impact on your page load speed or user experience.",
+          question: "Does CrawlWatch slow down my website?",
+          answer: "No. All integrations are asynchronous and process data from server logs. CrawlWatch never injects scripts into your pages or intercepts requests. There is zero impact on your page load speed or user experience.",
         },
         {
-          question: "What AI platforms does AgentLens track?",
-          answer: "AgentLens tracks all major AI platforms including ChatGPT (OpenAI), Perplexity, Claude (Anthropic), Gemini (Google), Copilot (Microsoft), and more. We continuously add support for new AI agents as they emerge.",
+          question: "What AI platforms does CrawlWatch track?",
+          answer: "CrawlWatch tracks all major AI platforms including ChatGPT (OpenAI), Perplexity, Claude (Anthropic), Gemini (Google), Copilot (Microsoft), and more. We continuously add support for new AI agents as they emerge.",
         },
       ],
     },
 
     about: {
       enabled: true,
-      blurb: "AgentLens is an AI agent analytics platform that helps growth teams, marketers, and SEO agencies understand and optimize for the 30% of web traffic that comes from AI agents and bots. Built for teams who recognize AI search as a critical growth channel, AgentLens provides real-time agent tracking, visibility scoring, content optimization, and competitive benchmarking across all major AI platforms.",
+      blurb: "CrawlWatch is an AI agent analytics platform that helps growth teams, marketers, and SEO agencies understand and optimize for the 30% of web traffic that comes from AI agents and bots. Built for teams who recognize AI search as a critical growth channel, CrawlWatch provides real-time agent tracking, visibility scoring, content optimization, and competitive benchmarking across all major AI platforms.",
       lastUpdated: new Date().toISOString().split("T")[0],
     },
 
@@ -324,12 +324,12 @@ export const siteConfig = {
         {
           name: "Sarah Chen",
           title: "Head of Growth at TechFlow",
-          quote: "We had no idea that 35% of our traffic was from AI agents until AgentLens showed us. Within 3 weeks of optimizing based on their recommendations, our AI citations increased by 120%.",
+          quote: "We had no idea that 35% of our traffic was from AI agents until CrawlWatch showed us. Within 3 weeks of optimizing based on their recommendations, our AI citations increased by 120%.",
         },
         {
           name: "Marcus Rivera",
           title: "SEO Director at GrowthLab Agency",
-          quote: "AgentLens is the missing piece in our SEO stack. We can now show clients exactly how they rank in AI search results, not just Google. The competitive benchmarking alone is worth the price.",
+          quote: "CrawlWatch is the missing piece in our SEO stack. We can now show clients exactly how they rank in AI search results, not just Google. The competitive benchmarking alone is worth the price.",
         },
         {
           name: "Priya Patel",
@@ -341,7 +341,7 @@ export const siteConfig = {
 
     llmsTxt: {
       enabled: true,
-      preamble: "AgentLens provides growth analytics for the agentic web, helping teams track AI agent traffic and optimize AI search visibility.",
+      preamble: "CrawlWatch provides growth analytics for the agentic web, helping teams track AI agent traffic and optimize AI search visibility.",
       extraPages: [],
     },
 
@@ -380,7 +380,7 @@ export const siteConfig = {
   waitlist: {
     hero: {
       title: "The Future of Web Analytics",
-      subtitle: "Join the waitlist for AgentLens and be first to see every AI agent visiting your site.",
+      subtitle: "Join the waitlist for CrawlWatch and be first to see every AI agent visiting your site.",
       badge: "Coming Soon",
     },
     earlyBird: {

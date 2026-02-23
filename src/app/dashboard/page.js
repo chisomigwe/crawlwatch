@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Button, Card, CardBody, CardHeader, Spinner, Chip } from "@heroui/react";
 import {
   Crown,
-  Activity,
   Bot,
   Eye,
   TrendingUp,
@@ -16,50 +15,72 @@ import {
   Clock,
   FileText,
   Settings,
+  Plus,
 } from "lucide-react";
 import Link from "next/link";
-import { siteConfig } from "@/config/site.config";
 
-// Sample data for the dashboard demo
-const SAMPLE_AGENTS = [
-  { name: "GPTBot", company: "OpenAI", visits: 342, pages: 128, lastSeen: "2 min ago", trend: "up", change: "+12%" },
-  { name: "ClaudeBot", company: "Anthropic", visits: 256, pages: 94, lastSeen: "5 min ago", trend: "up", change: "+8%" },
-  { name: "PerplexityBot", company: "Perplexity", visits: 189, pages: 67, lastSeen: "1 min ago", trend: "up", change: "+23%" },
-  { name: "Googlebot-Extended", company: "Google", visits: 412, pages: 201, lastSeen: "Just now", trend: "down", change: "-3%" },
-  { name: "Bytespider", company: "ByteDance", visits: 98, pages: 45, lastSeen: "12 min ago", trend: "up", change: "+5%" },
-  { name: "CCBot", company: "Common Crawl", visits: 67, pages: 34, lastSeen: "1 hr ago", trend: "down", change: "-7%" },
-];
+// Agent company mapping for display
+const AGENT_COMPANIES = {
+  GPTBot: "OpenAI",
+  "ChatGPT-User": "OpenAI",
+  "OAI-SearchBot": "OpenAI",
+  ClaudeBot: "Anthropic",
+  PerplexityBot: "Perplexity",
+  "Google-Extended": "Google",
+  Googlebot: "Google",
+  Bytespider: "ByteDance",
+  CCBot: "Common Crawl",
+  "Applebot-Extended": "Apple",
+  "cohere-ai": "Cohere",
+  "Meta-ExternalAgent": "Meta",
+  Amazonbot: "Amazon",
+  YouBot: "You.com",
+};
 
-const SAMPLE_TOP_PAGES = [
-  { path: "/docs/getting-started", visits: 89, agents: 4 },
-  { path: "/pricing", visits: 67, agents: 3 },
-  { path: "/blog/ai-search-guide", visits: 54, agents: 5 },
-  { path: "/features", visits: 48, agents: 3 },
-  { path: "/api/reference", visits: 41, agents: 2 },
-];
+function timeAgo(dateString) {
+  if (!dateString) return "N/A";
+  const diff = Date.now() - new Date(dateString).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins} min ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} hr ago`;
+  return `${Math.floor(hours / 24)} days ago`;
+}
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
   const [proStatus, setProStatus] = useState({ isPro: false, loading: true });
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [stats, setStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+
+  const fetchDashboard = useCallback(async () => {
+    try {
+      const [proRes, statsRes] = await Promise.all([
+        fetch("/api/check-pro-status"),
+        fetch("/api/dashboard/stats"),
+      ]);
+
+      const proData = await proRes.json();
+      setProStatus({ ...proData, loading: false });
+
+      const statsData = await statsRes.json();
+      setStats(statsData);
+    } catch (error) {
+      console.error("Error fetching dashboard:", error);
+      setProStatus({ isPro: false, loading: false });
+    } finally {
+      setStatsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    async function checkStatus() {
-      try {
-        const res = await fetch("/api/check-pro-status");
-        const data = await res.json();
-        setProStatus({ ...data, loading: false });
-      } catch (error) {
-        console.error("Error checking pro status:", error);
-        setProStatus({ isPro: false, loading: false });
-      }
-    }
-
     if (isLoaded && user) {
       fetch("/api/user/sync", { method: "POST" }).catch(console.error);
-      checkStatus();
+      fetchDashboard();
     }
-  }, [isLoaded, user]);
+  }, [isLoaded, user, fetchDashboard]);
 
   async function handleUpgrade() {
     setCheckoutLoading(true);
@@ -84,6 +105,10 @@ export default function DashboardPage() {
       </div>
     );
   }
+
+  const hasSites = stats?.sites?.length > 0;
+  const agents = stats?.agents || [];
+  const topPages = stats?.topPages || [];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -112,6 +137,26 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* No sites setup message */}
+      {!statsLoading && !hasSites && (
+        <Card className="mb-8">
+          <CardBody className="flex flex-col items-center gap-4 py-12 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+              <Plus className="h-8 w-8 text-emerald-600" />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900">Add your first site</h2>
+            <p className="max-w-md text-gray-600">
+              Connect your website to start tracking AI agent traffic. Once connected, you&apos;ll see real-time data here.
+            </p>
+            <Link href="/dashboard/sites">
+              <Button color="primary" size="lg" className="font-medium">
+                Add a Site
+              </Button>
+            </Link>
+          </CardBody>
+        </Card>
+      )}
+
       {/* Stats Overview */}
       <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -121,8 +166,10 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500">Total Agent Visits</p>
-              <p className="text-2xl font-bold text-gray-900">1,364</p>
-              <p className="text-xs text-emerald-600">+18% this week</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {statsLoading ? "..." : (stats?.totalVisits || 0).toLocaleString()}
+              </p>
+              <p className="text-xs text-gray-500">last 24 hours</p>
             </div>
           </CardBody>
         </Card>
@@ -134,8 +181,10 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500">AI Visibility Score</p>
-              <p className="text-2xl font-bold text-gray-900">72/100</p>
-              <p className="text-xs text-emerald-600">+5 pts this month</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {statsLoading ? "..." : stats?.visibilityScore ? `${stats.visibilityScore}/100` : "—"}
+              </p>
+              <p className="text-xs text-gray-500">across AI platforms</p>
             </div>
           </CardBody>
         </Card>
@@ -147,8 +196,10 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500">AI Citations</p>
-              <p className="text-2xl font-bold text-gray-900">47</p>
-              <p className="text-xs text-emerald-600">+12 this week</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {statsLoading ? "..." : (stats?.citations || 0)}
+              </p>
+              <p className="text-xs text-gray-500">last 7 days</p>
             </div>
           </CardBody>
         </Card>
@@ -160,8 +211,10 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500">Unique Agents</p>
-              <p className="text-2xl font-bold text-gray-900">14</p>
-              <p className="text-xs text-gray-500">across 6 platforms</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {statsLoading ? "..." : (stats?.uniqueAgents || 0)}
+              </p>
+              <p className="text-xs text-gray-500">detected on your site</p>
             </div>
           </CardBody>
         </Card>
@@ -175,58 +228,53 @@ export default function DashboardPage() {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <p className="text-lg font-semibold">Real-Time Agent Traffic</p>
-                <p className="text-sm text-gray-500">AI agents visiting your site right now</p>
+                <p className="text-sm text-gray-500">AI agents visiting your site (24h)</p>
               </div>
               <Chip color="success" variant="dot" size="sm">
                 Live
               </Chip>
             </CardHeader>
             <CardBody>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-gray-100">
-                      <th className="pb-3 font-medium text-gray-500">Agent</th>
-                      <th className="pb-3 font-medium text-gray-500">Visits (24h)</th>
-                      <th className="pb-3 font-medium text-gray-500">Pages</th>
-                      <th className="pb-3 font-medium text-gray-500">Trend</th>
-                      <th className="pb-3 font-medium text-gray-500">Last Seen</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {SAMPLE_AGENTS.map((agent) => (
-                      <tr key={agent.name} className="border-b border-gray-50">
-                        <td className="py-3">
-                          <div>
-                            <p className="font-medium text-gray-900">{agent.name}</p>
-                            <p className="text-xs text-gray-500">{agent.company}</p>
-                          </div>
-                        </td>
-                        <td className="py-3 font-medium text-gray-900">{agent.visits}</td>
-                        <td className="py-3 text-gray-600">{agent.pages}</td>
-                        <td className="py-3">
-                          <span className={`inline-flex items-center gap-1 text-sm font-medium ${
-                            agent.trend === "up" ? "text-emerald-600" : "text-red-500"
-                          }`}>
-                            {agent.trend === "up" ? (
-                              <ArrowUpRight className="h-3 w-3" />
-                            ) : (
-                              <ArrowDownRight className="h-3 w-3" />
-                            )}
-                            {agent.change}
-                          </span>
-                        </td>
-                        <td className="py-3">
-                          <span className="inline-flex items-center gap-1 text-gray-500">
-                            <Clock className="h-3 w-3" />
-                            {agent.lastSeen}
-                          </span>
-                        </td>
+              {agents.length === 0 && !statsLoading ? (
+                <p className="py-8 text-center text-gray-500">
+                  No agent visits recorded yet. Add a site and integrate the tracking snippet to start seeing data.
+                </p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-100">
+                        <th className="pb-3 font-medium text-gray-500">Agent</th>
+                        <th className="pb-3 font-medium text-gray-500">Visits (24h)</th>
+                        <th className="pb-3 font-medium text-gray-500">Pages</th>
+                        <th className="pb-3 font-medium text-gray-500">Last Seen</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {agents.map((agent) => (
+                        <tr key={agent.name} className="border-b border-gray-50">
+                          <td className="py-3">
+                            <div>
+                              <p className="font-medium text-gray-900">{agent.name}</p>
+                              <p className="text-xs text-gray-500">
+                                {AGENT_COMPANIES[agent.name] || "Unknown"}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="py-3 font-medium text-gray-900">{agent.visits}</td>
+                          <td className="py-3 text-gray-600">{agent.pages}</td>
+                          <td className="py-3">
+                            <span className="inline-flex items-center gap-1 text-gray-500">
+                              <Clock className="h-3 w-3" />
+                              {timeAgo(agent.lastSeen)}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>
@@ -277,20 +325,24 @@ export default function DashboardPage() {
               </div>
             </CardHeader>
             <CardBody>
-              <div className="space-y-3">
-                {SAMPLE_TOP_PAGES.map((page) => (
-                  <div key={page.path} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 truncate">
-                      <FileText className="h-4 w-4 flex-shrink-0 text-gray-400" />
-                      <span className="truncate text-sm text-gray-700">{page.path}</span>
+              {topPages.length === 0 ? (
+                <p className="py-4 text-center text-sm text-gray-500">No data yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {topPages.map((page) => (
+                    <div key={page.path} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 truncate">
+                        <FileText className="h-4 w-4 flex-shrink-0 text-gray-400" />
+                        <span className="truncate text-sm text-gray-700">{page.path}</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="font-medium text-gray-900">{page.visits}</span>
+                        <span className="text-gray-400">{page.agents} agents</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <span className="font-medium text-gray-900">{page.visits}</span>
-                      <span className="text-gray-400">{page.agents} agents</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardBody>
           </Card>
 

@@ -1,52 +1,38 @@
 "use client";
 
-import { useState } from "react";
-import { Button, Card, CardBody, CardHeader, Input, Textarea, Progress, Chip } from "@heroui/react";
-import { PenTool, Check, AlertTriangle, Info, ArrowRight, FileText, Sparkles } from "lucide-react";
-
-const SAMPLE_SUGGESTIONS = [
-  {
-    type: "critical",
-    title: "Add structured data (Schema.org)",
-    description: "Your pages lack JSON-LD structured data. AI agents heavily rely on structured data to understand page content and purpose. Add SoftwareApplication, FAQPage, and Organization schemas.",
-    impact: "High",
-  },
-  {
-    type: "warning",
-    title: "Improve heading hierarchy",
-    description: "Several pages skip heading levels (h1 to h3). AI agents use heading structure to understand content organization. Ensure sequential heading levels on all pages.",
-    impact: "Medium",
-  },
-  {
-    type: "warning",
-    title: "Add meta descriptions to 8 pages",
-    description: "8 of your pages are missing meta descriptions. AI agents use these to quickly understand page purpose and determine relevance to user queries.",
-    impact: "Medium",
-  },
-  {
-    type: "info",
-    title: "Create an llms.txt file",
-    description: "Adding an llms.txt file to your root domain helps AI crawlers understand your site structure and content priorities. This is an emerging standard supported by multiple AI platforms.",
-    impact: "Low",
-  },
-  {
-    type: "info",
-    title: "Optimize image alt text",
-    description: "23 images are missing descriptive alt text. While primarily an accessibility concern, AI agents also use alt text to understand visual content on your pages.",
-    impact: "Low",
-  },
-];
-
-const SAMPLE_PAGES = [
-  { path: "/", score: 82, status: "good" },
-  { path: "/features", score: 74, status: "okay" },
-  { path: "/pricing", score: 69, status: "needs-work" },
-  { path: "/blog/getting-started", score: 88, status: "good" },
-  { path: "/docs/api-reference", score: 45, status: "poor" },
-];
+import { useEffect, useState } from "react";
+import { Button, Card, CardBody, CardHeader, Input, Chip, Spinner } from "@heroui/react";
+import { FileText, Sparkles, AlertTriangle, Info } from "lucide-react";
 
 export default function OptimizePage() {
   const [url, setUrl] = useState("");
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPageScores() {
+      try {
+        const res = await fetch("/api/dashboard/optimize");
+        const json = await res.json();
+        setData(json);
+      } catch (error) {
+        console.error("Error fetching page scores:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPageScores();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
+
+  const pages = data?.pages || [];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -97,23 +83,26 @@ export default function OptimizePage() {
               </div>
             </CardHeader>
             <CardBody>
-              <div className="space-y-4">
-                {SAMPLE_PAGES.map((page) => (
-                  <div key={page.path} className="flex items-center justify-between">
-                    <span className="truncate text-sm text-gray-700">{page.path}</span>
-                    <span className={`ml-2 text-sm font-bold ${
-                      page.score >= 80 ? "text-emerald-600" :
-                      page.score >= 60 ? "text-amber-600" :
-                      "text-red-500"
-                    }`}>
-                      {page.score}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-6 text-center text-sm text-gray-400">
-                Connect your site to scan all pages automatically.
-              </p>
+              {pages.length === 0 ? (
+                <p className="py-8 text-center text-sm text-gray-500">
+                  No pages scanned yet. Connect your site and analyze pages to see scores here.
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {pages.map((page) => (
+                    <div key={page.path} className="flex items-center justify-between">
+                      <span className="truncate text-sm text-gray-700">{page.path}</span>
+                      <span className={`ml-2 text-sm font-bold ${
+                        page.overall_score >= 80 ? "text-emerald-600" :
+                        page.overall_score >= 60 ? "text-amber-600" :
+                        "text-red-500"
+                      }`}>
+                        {page.overall_score}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>
@@ -128,44 +117,58 @@ export default function OptimizePage() {
               </div>
             </CardHeader>
             <CardBody>
-              <div className="space-y-4">
-                {SAMPLE_SUGGESTIONS.map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className={`rounded-lg border p-4 ${
-                      suggestion.type === "critical"
-                        ? "border-red-200 bg-red-50"
-                        : suggestion.type === "warning"
-                        ? "border-amber-200 bg-amber-50"
-                        : "border-blue-200 bg-blue-50"
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="mt-0.5">
-                        {suggestion.type === "critical" ? (
-                          <AlertTriangle className="h-5 w-5 text-red-500" />
-                        ) : suggestion.type === "warning" ? (
-                          <AlertTriangle className="h-5 w-5 text-amber-500" />
-                        ) : (
-                          <Info className="h-5 w-5 text-blue-500" />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-semibold text-gray-900">{suggestion.title}</h4>
-                          <Chip size="sm" variant="flat" color={
-                            suggestion.impact === "High" ? "danger" :
-                            suggestion.impact === "Medium" ? "warning" : "default"
-                          }>
-                            {suggestion.impact} Impact
-                          </Chip>
+              {pages.length === 0 ? (
+                <p className="py-8 text-center text-gray-500">
+                  Analyze your pages to get personalized optimization suggestions for improving AI visibility.
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {pages.flatMap((page) =>
+                    (page.suggestions || []).map((suggestion, index) => (
+                      <div
+                        key={`${page.path}-${index}`}
+                        className={`rounded-lg border p-4 ${
+                          suggestion.type === "critical"
+                            ? "border-red-200 bg-red-50"
+                            : suggestion.type === "warning"
+                            ? "border-amber-200 bg-amber-50"
+                            : "border-blue-200 bg-blue-50"
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="mt-0.5">
+                            {suggestion.type === "critical" ? (
+                              <AlertTriangle className="h-5 w-5 text-red-500" />
+                            ) : suggestion.type === "warning" ? (
+                              <AlertTriangle className="h-5 w-5 text-amber-500" />
+                            ) : (
+                              <Info className="h-5 w-5 text-blue-500" />
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-semibold text-gray-900">{suggestion.title}</h4>
+                              <Chip size="sm" variant="flat" color={
+                                suggestion.impact === "High" ? "danger" :
+                                suggestion.impact === "Medium" ? "warning" : "default"
+                              }>
+                                {suggestion.impact} Impact
+                              </Chip>
+                            </div>
+                            <p className="mt-1 text-sm text-gray-600">{suggestion.description}</p>
+                            <p className="mt-1 text-xs text-gray-400">Page: {page.path}</p>
+                          </div>
                         </div>
-                        <p className="mt-1 text-sm text-gray-600">{suggestion.description}</p>
                       </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    ))
+                  )}
+                  {pages.every((p) => !p.suggestions?.length) && (
+                    <p className="py-4 text-center text-gray-500">
+                      No suggestions yet. Run a page analysis to get optimization recommendations.
+                    </p>
+                  )}
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>

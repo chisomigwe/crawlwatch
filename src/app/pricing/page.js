@@ -8,7 +8,7 @@ import { generatePageMetadata } from "@/lib/metadata";
 
 export const metadata = generatePageMetadata({
   title: "Pricing",
-  description: "Simple, transparent pricing for AgentLens. Start free and scale as you grow. Every tier is visible — no hidden costs.",
+  description: "Simple, transparent pricing for CrawlWatch. Start free and scale as you grow. Every tier is visible — no hidden costs.",
   path: "/pricing",
 });
 
