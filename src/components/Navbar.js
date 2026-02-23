@@ -12,90 +12,14 @@ import {
   NavbarMenuItem,
   Button,
 } from "@heroui/react";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 import { siteConfig } from "@/config/site.config";
-
-const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-// Conditionally import Clerk components
-let SignInButton, SignUpButton, SignedIn, SignedOut, UserButton;
-if (hasClerk) {
-  const clerk = require("@clerk/nextjs");
-  SignInButton = clerk.SignInButton;
-  SignUpButton = clerk.SignUpButton;
-  SignedIn = clerk.SignedIn;
-  SignedOut = clerk.SignedOut;
-  UserButton = clerk.UserButton;
-}
-
-function AuthButtons() {
-  if (!hasClerk) {
-    return (
-      <NavbarItem>
-        <Link href="/sign-up">
-          <Button color="primary" className="font-medium">
-            Get Started
-          </Button>
-        </Link>
-      </NavbarItem>
-    );
-  }
-
-  return (
-    <>
-      <SignedOut>
-        <NavbarItem className="hidden sm:flex">
-          <SignInButton mode="modal">
-            <Button variant="light" className="font-medium">
-              Sign In
-            </Button>
-          </SignInButton>
-        </NavbarItem>
-        <NavbarItem>
-          <SignUpButton mode="modal">
-            <Button color="primary" className="font-medium">
-              Get Started
-            </Button>
-          </SignUpButton>
-        </NavbarItem>
-      </SignedOut>
-      <SignedIn>
-        <NavbarItem>
-          <Link href="/dashboard">
-            <Button variant="light" className="font-medium">
-              Dashboard
-            </Button>
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <UserButton
-            afterSignOutUrl="/"
-            appearance={{
-              elements: {
-                avatarBox: "w-10 h-10",
-              },
-            }}
-          />
-        </NavbarItem>
-      </SignedIn>
-    </>
-  );
-}
-
-function MobileAuthButtons() {
-  if (!hasClerk) return null;
-
-  return (
-    <SignedOut>
-      <NavbarMenuItem className="mt-4">
-        <SignInButton mode="modal">
-          <Button variant="light" className="w-full font-medium">
-            Sign In
-          </Button>
-        </SignInButton>
-      </NavbarMenuItem>
-    </SignedOut>
-  );
-}
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -144,7 +68,41 @@ export function Navbar() {
 
       {/* Auth buttons */}
       <NavbarContent justify="end">
-        <AuthButtons />
+        <SignedOut>
+          <NavbarItem className="hidden sm:flex">
+            <SignInButton mode="modal">
+              <Button variant="light" className="font-medium">
+                Sign In
+              </Button>
+            </SignInButton>
+          </NavbarItem>
+          <NavbarItem>
+            <SignUpButton mode="modal">
+              <Button color="primary" className="font-medium">
+                Get Started
+              </Button>
+            </SignUpButton>
+          </NavbarItem>
+        </SignedOut>
+        <SignedIn>
+          <NavbarItem>
+            <Link href="/dashboard">
+              <Button variant="light" className="font-medium">
+                Dashboard
+              </Button>
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <UserButton
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  avatarBox: "w-10 h-10",
+                },
+              }}
+            />
+          </NavbarItem>
+        </SignedIn>
       </NavbarContent>
 
       {/* Mobile menu */}
@@ -160,7 +118,15 @@ export function Navbar() {
             </Link>
           </NavbarMenuItem>
         ))}
-        <MobileAuthButtons />
+        <SignedOut>
+          <NavbarMenuItem className="mt-4">
+            <SignInButton mode="modal">
+              <Button variant="light" className="w-full font-medium">
+                Sign In
+              </Button>
+            </SignInButton>
+          </NavbarMenuItem>
+        </SignedOut>
       </NavbarMenu>
     </HeroNavbar>
   );

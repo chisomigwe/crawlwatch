@@ -57,18 +57,9 @@ export const metadata = {
   },
 };
 
-const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-function AuthWrapper({ children }) {
-  if (hasClerk) {
-    return <ClerkProvider>{children}</ClerkProvider>;
-  }
-  return <>{children}</>;
-}
-
 export default function RootLayout({ children }) {
   return (
-    <AuthWrapper>
+    <ClerkProvider>
       <html
         lang="en"
         className={`${poppins.variable} ${bebasNeue.variable}`}
@@ -88,6 +79,6 @@ export default function RootLayout({ children }) {
           <TrackVisit />
         </body>
       </html>
-    </AuthWrapper>
+    </ClerkProvider>
   );
 }
