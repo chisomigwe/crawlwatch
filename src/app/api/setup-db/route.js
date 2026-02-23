@@ -39,6 +39,6 @@ export async function POST(request) {
       "4. The migration creates 7 tables: crawlwatch_users, crawlwatch_sites, crawlwatch_agents, crawlwatch_agent_visits, crawlwatch_visibility_scores, crawlwatch_page_scores, crawlwatch_citations",
       "5. It also seeds 14 known AI agents into crawlwatch_agents",
     ],
-    sql_url: "https://supabase.com/dashboard/project/akovvgmmemxkcldvsykx/sql",
+    sql_url: "https://supabase.com/dashboard — open your project's SQL Editor",
   });
 }
