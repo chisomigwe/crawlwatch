@@ -6,6 +6,8 @@ import { Providers } from "./providers";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { siteConfig } from "@/config/site.config";
+import { JsonLd } from "@/components/JsonLd";
+import { getAllSchemas } from "@/lib/structured-data";
 import TrackVisit from "@/components/TrackVisit";
 import "./globals.css";
 
@@ -24,6 +26,7 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
@@ -32,6 +35,9 @@ export const metadata = {
   keywords: siteConfig.keywords,
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -51,9 +57,18 @@ export const metadata = {
   },
 };
 
+const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+function AuthWrapper({ children }) {
+  if (hasClerk) {
+    return <ClerkProvider>{children}</ClerkProvider>;
+  }
+  return <>{children}</>;
+}
+
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <AuthWrapper>
       <html
         lang="en"
         className={`${poppins.variable} ${bebasNeue.variable}`}
@@ -67,11 +82,12 @@ export default function RootLayout({ children }) {
               <Footer />
             </div>
           </Providers>
+          <JsonLd data={getAllSchemas()} />
           <Analytics />
           <SpeedInsights />
           <TrackVisit />
         </body>
       </html>
-    </ClerkProvider>
+    </AuthWrapper>
   );
 }

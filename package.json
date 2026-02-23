@@ -1,8 +1,9 @@
 {
-  "name": "saas-template",
-  "version": "0.1.0",
+  "name": "agentlens",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
+  "description": "See every AI agent on your site. In real time. Growth analytics for the agentic web.",
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",

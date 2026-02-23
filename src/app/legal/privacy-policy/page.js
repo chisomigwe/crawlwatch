@@ -1,18 +1,28 @@
 import { siteConfig } from "@/config/site.config";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { LastUpdated } from "@/components/LastUpdated";
 
 export const metadata = {
   title: "Privacy Policy",
   description: `Privacy Policy for ${siteConfig.name}`,
+  alternates: {
+    canonical: "/legal/privacy-policy",
+  },
 };
 
 export default function PrivacyPolicyPage() {
   return (
     <main className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
+        <Breadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Legal", href: "/legal" },
+            { name: "Privacy Policy", href: "/legal/privacy-policy" },
+          ]}
+        />
         <h1 className="font-bebas text-6xl mb-4">Privacy Policy</h1>
-        <p className="text-gray-600 mb-8">
-          Last Updated: {siteConfig.legal.effectiveDate}
-        </p>
+        <LastUpdated date={siteConfig.legal.effectiveDate} />
 
         <div className="prose prose-lg max-w-none">
           {/* Section 1 */}

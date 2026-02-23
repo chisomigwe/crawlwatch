@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AgentLens
+
+**See every AI agent on your site. In real time.**
+
+AgentLens is a growth analytics platform for the agentic web. It tracks which AI agents (ChatGPT, Perplexity, Claude, Gemini, and others) visit your website, monitors your brand's visibility in AI-generated answers, and provides actionable recommendations to improve your AI search rankings.
+
+## Features
+
+- **Real-Time Agent Dashboard** — Watch AI agents visiting your site as they happen
+- **AI Visibility Score** — Instant visibility score across all major AI platforms
+- **Agent Directory** — Open database of 200+ known AI agents and bots
+- **Content Optimizer** — Score and optimize your content for AI visibility
+- **Competitive Benchmarking** — Track how you rank against competitors across AI platforms
+- **One-Click Integrations** — Vercel, Cloudflare, AWS, WordPress, Next.js, HTTP API
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Auth:** Clerk
+- **Payments:** Stripe
+- **Database:** Supabase
+- **UI:** HeroUI + Tailwind CSS 4 + Framer Motion
+- **Fonts:** Poppins (body) + Bebas Neue (headings)
+- **Analytics:** Vercel Analytics + Speed Insights
+- **Email:** Resend
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Clerk account (for auth)
+- Supabase account (for database)
+- Stripe account (for payments)
+
+### Installation
 
 ```bash
+# Clone the repo
+git clone https://github.com/chisomigwe/agentlens.git
+cd agentlens
+
+# Install dependencies
+npm install
+
+# Copy environment variables
+cp .env.example .env.local
+# Edit .env.local with your keys
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See `.env.example` for all required and optional environment variables.
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── page.js            # Landing page
+│   ├── layout.js          # Root layout with fonts & providers
+│   ├── dashboard/         # Protected dashboard
+│   │   ├── page.js        # Main dashboard with agent traffic
+│   │   ├── visibility/    # AI Visibility Score page
+│   │   └── optimize/      # Content Optimizer page
+│   ├── features/          # Features page
+│   ├── pricing/           # Pricing page with comparison table
+│   ├── directory/         # AI Agent Directory (public)
+│   └── api/               # API routes (Stripe, auth sync)
+├── components/            # Reusable components
+├── config/                # Site & theme configuration
+│   ├── site.config.js     # All branding, content, pricing
+│   └── theme.config.js    # Color themes
+└── lib/                   # Utilities (Stripe, Supabase, SEO)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Origin
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Built from the [Igwe Studios SaaS Template](https://github.com/chisomigwe) — a production-ready Next.js template with auth, payments, database, and SEO built in.
 
-## Deploy on Vercel
+Inspired by research into [Siteline.ai](https://siteline.ai) and the emerging AI agent analytics market, with improvements based on competitive analysis and community feedback.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT

@@ -1,58 +1,40 @@
 /**
- * Theme Configuration
+ * AgentLens Theme Configuration
  *
- * This is the central place to define your app's colors.
- * Change these values and they will be applied across:
- * - CSS variables (for custom styling)
- * - Tailwind utilities (primary-500, secondary-600, etc.)
- * - HeroUI components (buttons, inputs, etc.)
- *
- * COLOR PALETTE GENERATOR:
- * Use https://uicolors.app/create to generate a full palette from a single color
+ * Emerald/teal primary with indigo secondary — evokes data, growth, and intelligence.
  */
 
 export const themeColors = {
-  // ============================================
-  // PRIMARY COLOR - Your main brand color
-  // Used for: buttons, links, active states
-  // ============================================
   primary: {
-    50: "#eff6ff",
-    100: "#dbeafe",
-    200: "#bfdbfe",
-    300: "#93c5fd",
-    400: "#60a5fa",
-    500: "#3b82f6",   // Base color
-    600: "#2563eb",   // Default/main
-    700: "#1d4ed8",   // Hover states
-    800: "#1e40af",
-    900: "#1e3a8a",
-    950: "#172554",
-    DEFAULT: "#2563eb", // Maps to "primary" without shade
+    50: "#ecfdf5",
+    100: "#d1fae5",
+    200: "#a7f3d0",
+    300: "#6ee7b7",
+    400: "#34d399",
+    500: "#10b981",
+    600: "#059669",
+    700: "#047857",
+    800: "#065f46",
+    900: "#064e3b",
+    950: "#022c22",
+    DEFAULT: "#059669",
   },
 
-  // ============================================
-  // SECONDARY COLOR - Accent/gradient color
-  // Used for: gradients, badges, secondary actions
-  // ============================================
   secondary: {
     50: "#eef2ff",
     100: "#e0e7ff",
     200: "#c7d2fe",
     300: "#a5b4fc",
     400: "#818cf8",
-    500: "#6366f1",   // Base color
-    600: "#4f46e5",   // Default/main
-    700: "#4338ca",   // Hover states
+    500: "#6366f1",
+    600: "#4f46e5",
+    700: "#4338ca",
     800: "#3730a3",
     900: "#312e81",
     950: "#1e1b4b",
     DEFAULT: "#4f46e5",
   },
 
-  // ============================================
-  // SUCCESS COLOR - Positive actions/states
-  // ============================================
   success: {
     50: "#f0fdf4",
     100: "#dcfce7",
@@ -67,9 +49,6 @@ export const themeColors = {
     DEFAULT: "#22c55e",
   },
 
-  // ============================================
-  // WARNING COLOR - Caution states
-  // ============================================
   warning: {
     50: "#fffbeb",
     100: "#fef3c7",
@@ -84,9 +63,6 @@ export const themeColors = {
     DEFAULT: "#f59e0b",
   },
 
-  // ============================================
-  // DANGER COLOR - Error/destructive states
-  // ============================================
   danger: {
     50: "#fef2f2",
     100: "#fee2e2",
@@ -101,95 +77,52 @@ export const themeColors = {
     DEFAULT: "#ef4444",
   },
 
-  // ============================================
-  // NEUTRAL COLORS - Grays for text, borders, etc.
-  // ============================================
   gray: {
-    50: "#f9fafb",
-    100: "#f3f4f6",
-    200: "#e5e7eb",
-    300: "#d1d5db",
-    400: "#9ca3af",
-    500: "#6b7280",
-    600: "#4b5563",
-    700: "#374151",
-    800: "#1f2937",
-    900: "#111827",
-    950: "#030712",
+    50: "#f8fafc",
+    100: "#f1f5f9",
+    200: "#e2e8f0",
+    300: "#cbd5e1",
+    400: "#94a3b8",
+    500: "#64748b",
+    600: "#475569",
+    700: "#334155",
+    800: "#1e293b",
+    900: "#0f172a",
+    950: "#020617",
   },
 };
 
-// ============================================
-// THEME PRESETS - Quick color scheme options
-// Uncomment one to use, or create your own
-// ============================================
-
-// Blue theme (default)
-// Already set above
-
-// Purple theme
-// export const themeColors = { primary: { ... purple shades }, secondary: { ... pink shades } }
-
-// Green theme
-// export const themeColors = { primary: { ... emerald shades }, secondary: { ... teal shades } }
-
-// Orange theme
-// export const themeColors = { primary: { ... orange shades }, secondary: { ... amber shades } }
-
-/**
- * Generate CSS variables object for the theme
- * This is used by the ThemeProvider to inject CSS variables
- */
 export function generateCSSVariables() {
   const vars = {};
 
-  // Add primary colors
   Object.entries(themeColors.primary).forEach(([shade, value]) => {
-    if (shade !== "DEFAULT") {
-      vars[`--color-primary-${shade}`] = value;
-    }
+    if (shade !== "DEFAULT") vars[`--color-primary-${shade}`] = value;
   });
   vars["--color-primary"] = themeColors.primary.DEFAULT;
 
-  // Add secondary colors
   Object.entries(themeColors.secondary).forEach(([shade, value]) => {
-    if (shade !== "DEFAULT") {
-      vars[`--color-secondary-${shade}`] = value;
-    }
+    if (shade !== "DEFAULT") vars[`--color-secondary-${shade}`] = value;
   });
   vars["--color-secondary"] = themeColors.secondary.DEFAULT;
 
-  // Add success colors
   Object.entries(themeColors.success).forEach(([shade, value]) => {
-    if (shade !== "DEFAULT") {
-      vars[`--color-success-${shade}`] = value;
-    }
+    if (shade !== "DEFAULT") vars[`--color-success-${shade}`] = value;
   });
   vars["--color-success"] = themeColors.success.DEFAULT;
 
-  // Add warning colors
   Object.entries(themeColors.warning).forEach(([shade, value]) => {
-    if (shade !== "DEFAULT") {
-      vars[`--color-warning-${shade}`] = value;
-    }
+    if (shade !== "DEFAULT") vars[`--color-warning-${shade}`] = value;
   });
   vars["--color-warning"] = themeColors.warning.DEFAULT;
 
-  // Add danger colors
   Object.entries(themeColors.danger).forEach(([shade, value]) => {
-    if (shade !== "DEFAULT") {
-      vars[`--color-danger-${shade}`] = value;
-    }
+    if (shade !== "DEFAULT") vars[`--color-danger-${shade}`] = value;
   });
   vars["--color-danger"] = themeColors.danger.DEFAULT;
 
   return vars;
 }
 
-/**
- * HeroUI theme configuration
- * This maps our theme colors to HeroUI's theme system
- */
 export const heroUITheme = {
   themes: {
     light: {

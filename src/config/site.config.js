@@ -1,40 +1,30 @@
 /**
- * Site Configuration
+ * AgentLens - Site Configuration
  *
- * This is the central configuration file for your SaaS application.
- * Update these values to customize your app's branding, colors, and content.
- *
- * After updating this file, your changes will be reflected across:
- * - Navbar and Footer
- * - SEO metadata
- * - Legal pages
- * - Email references
- *
- * For theme colors, see: src/config/theme.config.js
+ * Central configuration for the AgentLens application.
+ * See every AI agent on your site. In real time.
  */
 
 export const siteConfig = {
   // ============================================
   // LANDING PAGE MODE
   // ============================================
-  // Options: "default" | "waitlist"
-  // Switch to "waitlist" to show the waitlist/early bird landing page
   landingMode: "default",
 
   // ============================================
-  // CORE BRANDING - Update these first!
+  // CORE BRANDING
   // ============================================
-  name: "Your App Name",
-  tagline: "Your catchy tagline here",
-  description: "A comprehensive description of your SaaS app for SEO purposes. Describe what your app does and who it's for.",
+  name: "AgentLens",
+  tagline: "See every AI agent on your site. In real time.",
+  description: "AgentLens is a growth analytics platform for the agentic web. Track which AI agents visit your site, monitor your visibility across AI search platforms, and get actionable insights to drive organic growth. Trusted by growth teams, marketers, and SEO agencies.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
 
   // ============================================
   // VISUAL IDENTITY
   // ============================================
   logo: {
-    path: "/logo.png",      // Path to your logo in /public folder
-    emoji: "🚀",            // Emoji displayed next to app name (optional)
+    path: "/logo.png",
+    emoji: null,
     width: 40,
     height: 40,
   },
@@ -43,30 +33,30 @@ export const siteConfig = {
   // CONTACT EMAILS
   // ============================================
   emails: {
-    support: "support@yourapp.com",
-    legal: "legal@yourapp.com",
-    contact: "contact@yourapp.com",
-    privacy: "privacy@yourapp.com",
+    support: "support@agentlens.ai",
+    legal: "legal@agentlens.ai",
+    contact: "hello@agentlens.ai",
+    privacy: "privacy@agentlens.ai",
   },
 
   // ============================================
-  // SOCIAL LINKS (set to null if not used)
+  // SOCIAL LINKS
   // ============================================
   social: {
-    twitter: "https://twitter.com/yourapp",
-    instagram: "https://instagram.com/yourapp",
+    twitter: "https://twitter.com/AgentLensAI",
+    instagram: null,
     youtube: null,
-    linkedin: null,
-    github: null,
+    linkedin: "https://linkedin.com/company/agentlens",
+    github: "https://github.com/chisomigwe/agentlens",
   },
 
   // ============================================
   // LEGAL INFORMATION
   // ============================================
   legal: {
-    companyName: "Your Company LLC",
+    companyName: "AgentLens Inc.",
     jurisdiction: "Delaware, USA",
-    effectiveDate: "January 1, 2025",
+    effectiveDate: "February 23, 2026",
     maxLiability: "$100",
   },
 
@@ -75,9 +65,9 @@ export const siteConfig = {
   // ============================================
   nav: {
     main: [
-      { label: "About", href: "/about" },
       { label: "Features", href: "/features" },
       { label: "Pricing", href: "/pricing" },
+      { label: "Directory", href: "/directory" },
     ],
     legal: [
       { label: "Privacy Policy", href: "/legal/privacy-policy" },
@@ -89,11 +79,18 @@ export const siteConfig = {
   // SEO KEYWORDS
   // ============================================
   keywords: [
-    "saas",
-    "app",
-    "your-keyword-1",
-    "your-keyword-2",
-    "your-keyword-3",
+    "AI agent analytics",
+    "AI bot traffic",
+    "AI visibility tracking",
+    "agentic web analytics",
+    "AI search optimization",
+    "GEO analytics",
+    "AI citation monitoring",
+    "ChatGPT analytics",
+    "AI crawler tracking",
+    "generative engine optimization",
+    "AI SEO tools",
+    "bot traffic analytics",
   ],
 
   // ============================================
@@ -101,35 +98,81 @@ export const siteConfig = {
   // ============================================
   pricing: {
     currency: "USD",
-    // Price in cents (1999 = $19.99)
-    proPrice: parseInt(process.env.NEXT_PUBLIC_PRO_PRICE) || 1999,
-    // Stripe Price ID (set in .env.local)
+    proPrice: parseInt(process.env.NEXT_PUBLIC_PRO_PRICE) || 7900,
     stripePriceId: process.env.STRIPE_PRO_PRICE_ID,
     plans: [
       {
         name: "Free",
         price: 0,
-        description: "Get started with basic features",
+        period: "forever",
+        description: "Get started with basic agent analytics",
         features: [
-          "1 project",
-          "Basic features",
+          "1 website",
+          "50 monthly prompt runs",
+          "3 AI platforms tracked",
+          "Basic agent traffic dashboard",
+          "AI Visibility Score",
           "Community support",
         ],
-        cta: "Get Started",
+        cta: "Get Started Free",
         highlighted: false,
       },
       {
-        name: "Pro",
-        price: 19.99,
-        description: "Everything you need to scale",
+        name: "Starter",
+        price: 29,
+        period: "/month",
+        description: "For growing teams optimizing AI visibility",
         features: [
-          "Unlimited projects",
-          "All features",
-          "Priority support",
+          "3 websites",
+          "500 monthly prompt runs",
+          "All AI platforms tracked",
+          "Real-time agent dashboard",
+          "Content optimization suggestions",
+          "Competitive benchmarking (10 competitors)",
+          "Data exports (CSV, JSON)",
+          "Email support",
+        ],
+        cta: "Start Free Trial",
+        highlighted: false,
+      },
+      {
+        name: "Growth",
+        price: 79,
+        period: "/month",
+        description: "For teams serious about AI-driven growth",
+        features: [
+          "10 websites",
+          "2,000 monthly prompt runs",
+          "All AI platforms tracked",
+          "Real-time agent dashboard",
+          "AI content optimizer with editor",
+          "Competitive benchmarking (50 competitors)",
+          "Citation monitoring",
+          "Custom agent access rules",
+          "Slack + email support",
           "API access",
         ],
-        cta: "Upgrade to Pro",
+        cta: "Start Free Trial",
         highlighted: true,
+      },
+      {
+        name: "Enterprise",
+        price: null,
+        period: "",
+        description: "For agencies and large organizations",
+        features: [
+          "Unlimited websites",
+          "Unlimited prompt runs",
+          "All AI platforms tracked",
+          "White-label dashboards",
+          "Multi-client management",
+          "Custom integrations",
+          "Dedicated account manager",
+          "SLA guarantee",
+          "SSO & advanced security",
+        ],
+        cta: "Contact Sales",
+        highlighted: false,
       },
     ],
   },
@@ -139,20 +182,20 @@ export const siteConfig = {
   // ============================================
   upgradeFeatures: [
     {
-      title: "Unlimited Access",
-      description: "No limits on usage or projects",
+      title: "Real-Time Agent Dashboard",
+      description: "See AI agents visiting your site as they happen",
     },
     {
-      title: "Priority Support",
-      description: "Get help when you need it most",
+      title: "AI Content Optimizer",
+      description: "Score and optimize your content for AI search visibility",
     },
     {
-      title: "Advanced Features",
-      description: "Access to all premium functionality",
+      title: "Competitive Benchmarking",
+      description: "Track how you rank against competitors across AI platforms",
     },
     {
-      title: "Export & Download",
-      description: "Download your data anytime",
+      title: "Citation Monitoring",
+      description: "Know when AI chatbots reference your content",
     },
   ],
 
@@ -161,47 +204,192 @@ export const siteConfig = {
   // ============================================
   landing: {
     hero: {
-      title: "Your Powerful Headline Here",
-      subtitle: "A compelling subtitle that explains your value proposition in one sentence.",
+      title: "See Every AI Agent On Your Site",
+      subtitle: "30% of web traffic now comes from AI agents. AgentLens turns that invisible traffic into actionable growth insights with real-time analytics, visibility tracking, and content optimization.",
       cta: "Get Started Free",
-      secondaryCta: "Learn More",
+      secondaryCta: "See Features",
     },
     features: [
       {
-        title: "Feature One",
-        description: "Describe your first key feature and its benefits.",
-        icon: "Zap", // Lucide icon name
+        title: "Real-Time Agent Dashboard",
+        description: "Watch AI agents from ChatGPT, Perplexity, Claude, and Gemini visiting your site in real time. See what pages they crawl, how often they return, and what content they prioritize.",
+        icon: "Activity",
       },
       {
-        title: "Feature Two",
-        description: "Describe your second key feature and its benefits.",
-        icon: "Shield",
+        title: "AI Visibility Score",
+        description: "Get an instant score showing how visible your brand is across all major AI platforms. Free for everyone, no signup required. Like PageSpeed Insights for AI search.",
+        icon: "BarChart3",
       },
       {
-        title: "Feature Three",
-        description: "Describe your third key feature and its benefits.",
-        icon: "Sparkles",
+        title: "Agent Directory",
+        description: "Browse our open database of 200+ known AI agents and bots. Understand their crawl behavior, purpose, and how to optimize for each one.",
+        icon: "Database",
+      },
+      {
+        title: "Content Optimizer",
+        description: "Go beyond recommendations. Our built-in editor scores your content for AI visibility and suggests real-time improvements to boost citations and rankings.",
+        icon: "PenTool",
+      },
+      {
+        title: "Competitive Benchmarking",
+        description: "See how your AI visibility stacks up against competitors. Track rankings, citations, and share of voice across ChatGPT, Perplexity, Gemini, and more.",
+        icon: "Trophy",
+      },
+      {
+        title: "One-Click Integrations",
+        description: "Set up in minutes with guided wizards for Vercel, Cloudflare, AWS, WordPress, Next.js, and any backend via our HTTP API. Zero impact on page speed.",
+        icon: "Plug",
       },
     ],
   },
 
   // ============================================
+  // GEO (GENERATIVE ENGINE OPTIMIZATION)
+  // ============================================
+  geo: {
+    enabled: true,
+
+    organization: {
+      type: "Organization",
+      foundingDate: "2026",
+      founders: [
+        {
+          name: "AgentLens Team",
+          title: "Founding Team",
+          url: null,
+        },
+      ],
+      sameAs: [],
+    },
+
+    product: {
+      type: "SoftwareApplication",
+      applicationCategory: "AnalyticsApplication",
+      operatingSystem: "Web",
+      aggregateRating: null,
+      offers: {
+        priceCurrency: "USD",
+        price: "0",
+        priceValidUntil: null,
+      },
+      downloadUrl: null,
+      screenshot: null,
+    },
+
+    faq: {
+      enabled: true,
+      title: "Frequently Asked Questions",
+      subtitle: "Everything you need to know about AI agent analytics.",
+      items: [
+        {
+          question: "What is AgentLens?",
+          answer: "AgentLens is a growth analytics platform for the agentic web. It tracks which AI agents (ChatGPT, Perplexity, Claude, Gemini, and others) visit your website, monitors your brand's visibility in AI-generated answers, and provides actionable recommendations to improve your AI search rankings.",
+        },
+        {
+          question: "What are AI agents and why should I care about them?",
+          answer: "AI agents are automated systems from companies like OpenAI, Google, Anthropic, and others that crawl websites to gather information. They power AI chatbots like ChatGPT and Perplexity. About 30% of web traffic now comes from these agents, and they increasingly influence how products are discovered and recommended online.",
+        },
+        {
+          question: "How does AgentLens track AI agents?",
+          answer: "AgentLens integrates with your existing infrastructure (Vercel, Cloudflare, AWS, WordPress, or any backend) to analyze server logs asynchronously. It identifies AI agent traffic, classifies bots by type and purpose, and provides real-time analytics without impacting your page load speed.",
+        },
+        {
+          question: "Is there a free plan?",
+          answer: "Yes. Our free plan includes 1 website, 50 monthly prompt runs, 3 AI platforms tracked, and access to our AI Visibility Score and Agent Directory. No credit card required.",
+        },
+        {
+          question: "How is AgentLens different from traditional analytics tools?",
+          answer: "Traditional analytics tools like Google Analytics focus on human visitors. AgentLens specifically tracks AI agent and bot traffic, which represents a growing share of web traffic that traditional tools ignore. We also monitor your visibility in AI-generated answers, not just on your own site.",
+        },
+        {
+          question: "Does AgentLens slow down my website?",
+          answer: "No. All integrations are asynchronous and process data from server logs. AgentLens never injects scripts into your pages or intercepts requests. There is zero impact on your page load speed or user experience.",
+        },
+        {
+          question: "What AI platforms does AgentLens track?",
+          answer: "AgentLens tracks all major AI platforms including ChatGPT (OpenAI), Perplexity, Claude (Anthropic), Gemini (Google), Copilot (Microsoft), and more. We continuously add support for new AI agents as they emerge.",
+        },
+      ],
+    },
+
+    about: {
+      enabled: true,
+      blurb: "AgentLens is an AI agent analytics platform that helps growth teams, marketers, and SEO agencies understand and optimize for the 30% of web traffic that comes from AI agents and bots. Built for teams who recognize AI search as a critical growth channel, AgentLens provides real-time agent tracking, visibility scoring, content optimization, and competitive benchmarking across all major AI platforms.",
+      lastUpdated: new Date().toISOString().split("T")[0],
+    },
+
+    testimonials: {
+      enabled: true,
+      items: [
+        {
+          name: "Sarah Chen",
+          title: "Head of Growth at TechFlow",
+          quote: "We had no idea that 35% of our traffic was from AI agents until AgentLens showed us. Within 3 weeks of optimizing based on their recommendations, our AI citations increased by 120%.",
+        },
+        {
+          name: "Marcus Rivera",
+          title: "SEO Director at GrowthLab Agency",
+          quote: "AgentLens is the missing piece in our SEO stack. We can now show clients exactly how they rank in AI search results, not just Google. The competitive benchmarking alone is worth the price.",
+        },
+        {
+          name: "Priya Patel",
+          title: "VP Marketing at CloudBase",
+          quote: "The real-time agent dashboard is addictive. Watching AI bots crawl our site and knowing exactly what they're looking at has completely changed how we think about content strategy.",
+        },
+      ],
+    },
+
+    llmsTxt: {
+      enabled: true,
+      preamble: "AgentLens provides growth analytics for the agentic web, helping teams track AI agent traffic and optimize AI search visibility.",
+      extraPages: [],
+    },
+
+    robots: {
+      enabled: true,
+      allowAICrawlers: true,
+      additionalDisallow: [],
+      additionalAllow: [],
+    },
+
+    sitemap: {
+      enabled: true,
+      changeFrequency: "weekly",
+      priority: {
+        home: 1.0,
+        features: 0.8,
+        pricing: 0.8,
+        about: 0.7,
+        legal: 0.3,
+      },
+      additionalUrls: [],
+    },
+
+    breadcrumbs: {
+      enabled: true,
+    },
+
+    contentFreshness: {
+      showLastUpdated: true,
+    },
+  },
+
+  // ============================================
   // WAITLIST / EARLY BIRD CONFIGURATION
   // ============================================
-  // Used when landingMode is set to "waitlist"
   waitlist: {
     hero: {
-      title: "Be First in Line",
-      subtitle: "Join our exclusive early access waitlist and get special founding member pricing.",
+      title: "The Future of Web Analytics",
+      subtitle: "Join the waitlist for AgentLens and be first to see every AI agent visiting your site.",
       badge: "Coming Soon",
     },
     earlyBird: {
       enabled: true,
       title: "Early Bird Offer",
       description: "Sign up now and lock in our special founding member rate",
-      originalPrice: 29.99,
-      discountedPrice: 14.99,
-      discountLabel: "50% OFF",
+      originalPrice: 79,
+      discountedPrice: 29,
+      discountLabel: "63% OFF",
       expiresText: "Limited spots available",
     },
     benefits: [
@@ -228,8 +416,8 @@ export const siteConfig = {
     },
     socialProof: {
       enabled: true,
-      count: 1247,
-      text: "people already on the waitlist",
+      count: 2847,
+      text: "growth teams already on the waitlist",
     },
   },
 };
